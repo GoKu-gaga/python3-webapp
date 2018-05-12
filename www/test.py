@@ -3,9 +3,9 @@ from models import User, Blog, Comment
 import asyncio
 
 async def test():
-    await orm.create_pool(loop=loop, host='localhost', port=3306, user='root', password='', db='awesome')
+    await orm.create_pool(loop=loop, host='localhost', port=3306, user='www-data', password='www-data', db='awesome')
 
-    u = User(name='Test', email='test@example.com', password='1234567890', image='about:blank')
+    u = User(name='test', email='test@example.com', password='1234567890', image='about:blank')
 
     await u.save()
 
