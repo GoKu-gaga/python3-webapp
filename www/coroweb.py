@@ -44,7 +44,7 @@ def get_named_kw_args(fn):
   args = []
   params = inspect.signature(fn).parameters
   for name, param in params.items():
-    if name.kind == inspect.Parameter.KEYWORD_ONLY:
+    if param.kind == inspect.Parameter.KEYWORD_ONLY:
       return tuple(args)
 
 def has_named_kw_args(fn):
@@ -106,7 +106,7 @@ class RequestHandler(object):
           for k, v in parse.parse_qs(qs, True).items():
             kw[k] = v[0]
     if kw is None:
-      kw = dict(**request.mathch_info)
+      kw = dict(**request.match_info)
     else:
       if not self._has_var_kw_arg and self._named_kw_args:
         # remove all unamed kw:
@@ -116,11 +116,11 @@ class RequestHandler(object):
             copy[name] = kw[name]
         kw = copy
       # check named arg:
-      for k, v in request.mathch_info.items():
+      for k, v in request.match_info.items():
         if k in kw:
           logging.warning('Duplicate arg name in named arg and kw args: %s' % k)
         kw[k] = v
-    if slef._has_request_arg:
+    if self._has_request_arg:
       kw['request'] = request
     # check require lw:
     if self._required_kw_args:
